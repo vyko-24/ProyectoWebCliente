@@ -6,6 +6,8 @@ import TableComponent from '../../../components/TableComponent';
 import { AiFillEdit, AiFillDelete, AiOutlineDoubleLeft } from "react-icons/ai";
 import { FaSearch, FaPlus } from "react-icons/fa";
 import ModalComponent from '../../../components/ModalComponent';
+import { BsFillPatchCheckFill } from "react-icons/bs";
+
 
 const UserPage = () => {
     const [loadin, setLoading] = useState(false);
@@ -47,7 +49,7 @@ const UserPage = () => {
                         {<AiFillEdit />}
                     </Button>
                     <Button outline size={'sm'} pill color={row.status ? 'failure' : 'success'}>
-                        {row.status ? <AiFillDelete /> : <AiOutlineDoubleLeft />}
+                        {row.status ? <AiFillDelete /> : <BsFillPatchCheckFill   />}
                     </Button>
                 </>
             ),
@@ -95,7 +97,7 @@ const UserPage = () => {
                     </div>
                     <div className='justify-center'>
                         <Button pill outline color='success' onClick={() => setOpenModal(true)}><FaPlus /></Button>
-                            <ModalComponent openModal={openModal} setOpenModal={setOpenModal} />
+                        <ModalComponent openModal={openModal} getAllUsers={getUsers} setOpenModal={setOpenModal} />
                     </div>
                 </div>
                 <Card>

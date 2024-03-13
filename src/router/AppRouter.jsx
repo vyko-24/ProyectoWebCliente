@@ -9,6 +9,7 @@ import ClientLayout from '../modules/admin/users/ClientLayout';
 
 const AppRouter = () => {
   const { user } = useContext(AuthContext);
+  console.log(user);
   var rol;
   var nombreDelRol;
   var isAdmin;
@@ -38,11 +39,11 @@ const AppRouter = () => {
     createRoutesFromElements(
       <>
         {user.signed ?
-        
         (
           isAdmin ? (
             <Route path='/' element={<AdminLayout />}>
-              <Route path='users' element={<UserPage />} />
+            <Route path='users' element={<UserPage />} />
+              <Route path='/' element={<UserPage />} />
               <Route path='admin' element={<>Admin Home</>} />
               <Route path='productos' element={<>Productos</>} />
             </Route>

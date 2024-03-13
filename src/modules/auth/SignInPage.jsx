@@ -42,6 +42,7 @@ const SignInPage = () => {
           console.log('Banana');
           console.log(response);
           console.log(response.data.roles);
+          
           let key = response.data.roles;
           switch (key) {
             case "ADMIN_ROLE":
