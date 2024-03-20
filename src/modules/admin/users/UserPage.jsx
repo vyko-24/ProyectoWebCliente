@@ -7,13 +7,19 @@ import { AiFillEdit, AiFillDelete, AiOutlineDoubleLeft } from "react-icons/ai";
 import { FaSearch, FaPlus } from "react-icons/fa";
 import ModalComponent from '../../../components/ModalComponent';
 import { BsFillPatchCheckFill } from "react-icons/bs";
+import { LiaTrashRestoreSolid } from "react-icons/lia";
+import { confirmAlert, CustomAlert } from '../../../config/alert/alert';
+import ModalUpdate from '../../../components/ModalUpdate';
+
 
 
 const UserPage = () => {
     const [loadin, setLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [openModalUp, setOpenModalUp] = useState(false);
     const [users, setUsers] = useState([]);
     const [filterText, setFilterText] = useState("");
+    const [userData, setUserData] = useState(null);
     const columns = useMemo(() => [
         {
             name: "#",
@@ -45,16 +51,43 @@ const UserPage = () => {
             name: "Acciones",
             cell: (row) => (
                 <>
-                    <Button outline size={'sm'} pill color='warning'>
-                        {<AiFillEdit />}
+                    <Button outline size={'sm'} pill color='warning' onClick={() => goUpdate(row)}>
+                        <AiFillEdit />
                     </Button>
-                    <Button outline size={'sm'} pill color={row.status ? 'failure' : 'success'}>
-                        {row.status ? <AiFillDelete /> : <BsFillPatchCheckFill   />}
+
+                    <Button outline size={'sm'} pill color={row.status ? 'failure' : 'success'} onClick={() => changeStatus(row.id)} >
+                        {row.status ? <AiFillDelete /> : <LiaTrashRestoreSolid />}
                     </Button>
                 </>
             ),
         },
     ]);
+
+    const goUpdate = (data) => {
+        console.log(data);
+        setOpenModalUp(true);
+        setUserData(data);
+    }
+
+    const changeStatus = (id) => {
+        confirmAlert(async () => {
+            try {
+                const response = await AxiosClient({
+                    method: 'PATCH',
+                    url: '/user/' + id
+                });
+                console.log("Respuesta del servidor:", response);
+                if (!response.error) {
+                    CustomAlert("Éxito", "Status del usuario cambiado", "success")
+                    getUsers();
+                }
+                return response;
+            } catch (error) {
+                CustomAlert("Error", "Ocurrió un error al cambiar el status", "error")
+            } finally {
+            }
+        })
+    }
 
     const getUsers = async () => {
         try {
@@ -104,6 +137,8 @@ const UserPage = () => {
                     <TableComponent columns={columns} data={filter()} progress={loadin} />
                 </Card>
             </section>
+        {openModalUp && <ModalUpdate data={userData} openModalUp={openModalUp} setOpenModalUp={setOpenModalUp} />}
+
         </>
     )
 }

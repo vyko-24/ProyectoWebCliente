@@ -44,6 +44,7 @@ const SignInPage = () => {
           console.log(response.data.roles);
           
           let key = response.data.roles;
+          console.log(key);
           switch (key) {
             case "ADMIN_ROLE":
               navigate('/admin', { replace: true });
